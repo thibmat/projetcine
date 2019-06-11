@@ -8,7 +8,7 @@ use src\Entity\Film;
 class IndexController
 {
     /**
-     * Liste les différents produits de la table produit
+     * Liste les différents produits de la table film
      */
     public function index(){
 
@@ -16,10 +16,11 @@ class IndexController
         $database = new Database();
 
         //Requete SQL
-        $query = 'SELECT * FROM film ORDER BY film_date LIMIT 0,6';
+        $query = 'SELECT * FROM film NATURAL JOIN genre ORDER BY film_date LIMIT 0,6';
         $films = $database->query($query,Film::class);
         return compact('films');
     }
+
 }
 
 

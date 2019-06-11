@@ -12,9 +12,10 @@ foreach ($films as $film):?>
             <img src="/img/<?php echo $film->getFilmImageName()?>" class="card-img-top img-fluid mh-100 mw-100" alt="Image de <?php echo $film->getFilmTitre() ?>">
         </figure>
         <div class="card-body">
-            <h5 class="card-title w-100 text-center"><?php echo "<strong>".$film->getFilmTitre()."</strong>";?></h5>
-            <p class="card-text"><?php echo "<strong>Sortie le : ".$film->getFilmDate()."</strong><br>".$film->getFilmSynopsis();?></p>
-
+            <a href="film/<?=$film->getFilmId()?>">
+                <h5 class="card-title w-100 text-center"><?=  "[".$film->getGenreLibelle()."] <strong>".$film->getFilmTitre()."</strong>";?></h5>
+                <p class="card-text"><?php echo "<strong>Sortie le ".$film->getFilmDate()."</strong><br>".$film->truncate($film->getFilmSinopsys(),50,'(...)');?></p>
+            </a>
         </div>
     </div>
 <?php

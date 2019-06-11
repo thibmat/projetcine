@@ -4,6 +4,8 @@
 namespace src\Entity;
 
 
+use src\Utilities\Database;
+
 class Critique
 {
     /**
@@ -17,7 +19,7 @@ class Critique
     /**
      * @var string
      */
-    private $critique_description;
+    private $critique_contenu;
 
     /**
      * @return int
@@ -54,17 +56,32 @@ class Critique
     /**
      * @return string
      */
-    public function getCritiqueDescription(): string
+    public function getCritiqueContenu(): string
     {
-        return $this->critique_description;
+        return $this->critique_contenu;
     }
 
     /**
      * @param string $critique_description
      */
-    public function setCritiqueDescription(string $critique_description): void
+    public function setCritiqueContenu(string $critique_contenu): void
     {
-        $this->critique_description = $critique_description;
+        $this->critique_contenu = $critique_contenu;
+    }
+
+    /**
+     * Liste les différentes critiques de la table critique
+     * @param int $film_id
+     * @return array|null
+     */
+    public function listCritiques(int $film_id):?array
+    {
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT critique_titre,critique_contenu,user_name FROM critique JOIN app_user ON app_user_user_id = app_user.user_id WHERE film_film_id = '".$film_id."' ORDER BY critique_id";
+        $critiques = $database->query($query,Critique::class);
+        return compact('critiques');
     }
 
 }

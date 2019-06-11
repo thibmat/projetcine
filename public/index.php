@@ -11,13 +11,14 @@ if (isset($_GET['exit'])){
     header('Location: '.$urlGet[0]);
 }
 
-
-
 $router = new Router();
 $router->addRoute('/','index.php');
 $router->addRoute('/inscription','register.php');
-$router->addRoute('/films','ListFilms.php');
-$router->addRoute('/film','film.php');
+$router->addRoute('/films[a-z0-9&?=]*','ListFilms.php');
+$router->addRoute('/film/[0-9]*', 'film.php');
+$router->addRoute('/connexion','connexion.php');
+$router->addRoute('/addFilm[a-zA-Z0-9&?=]*','addFilm.php');
+
 $template = $router->match();
 require_once dirname(__DIR__) . "/templates/inc/header.php";
 

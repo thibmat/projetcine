@@ -1,9 +1,8 @@
 <?php
 
-
 namespace src\Entity;
 
-
+use DateTime;
 use src\Utilities\Database;
 
 class Film
@@ -23,12 +22,21 @@ class Film
     /**
      * @var string
      */
-    private $film_synopsis;
+    private $film_sinopsys;
     /**
      * @var string
      */
     private $film_image_name;
 
+    /**
+     * @var int
+     */
+    private $genre_id;
+
+    /**
+     * @var string
+     */
+    private $genre_libelle;
 
     /**
      * @return int
@@ -81,18 +89,19 @@ class Film
     /**
      * @return string
      */
-    public function getFilmSynopsis(): string
+    public function getFilmSinopsys(): string
     {
-        return $this->film_synopsis;
+        return $this->film_sinopsys;
     }
 
     /**
-     * @param string $film_synopsis
+     * @param string $film_sinopsys
      */
-    public function setFilmSynopsis(string $film_synopsis): void
+    public function setFilmSinopsys(string $film_sinopsys): void
     {
-        $this->film_synopsis = $film_synopsis;
+        $this->film_sinopsys = $film_sinopsys;
     }
+
     /**
      * @return string
      */
@@ -102,20 +111,81 @@ class Film
     }
 
     /**
+     * @param string $film_image_name
+     */
+    public function setFilmImageName(string $film_image_name): void
+    {
+        $this->film_image_name = $film_image_name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGenreId(): int
+    {
+        return $this->genre_id;
+    }
+
+    /**
+     * @param int $genre_id
+     */
+    public function setGenreId(int $genre_id): void
+    {
+        $this->genre_id = $genre_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGenreLibelle(): string
+    {
+        return $this->genre_libelle;
+    }
+
+    /**
+     * @param string $genre_libelle
+     */
+    public function setGenreLibelle(string $genre_libelle): void
+    {
+        $this->genre_libelle = $genre_libelle;
+    }
+
+
+    /**
      * Cette fonction permet de récupérer les details d'un film
-     * @param int $film_id
-     * @param string $classname
+     * @param int $filmId
+     * @param string $className
      * @return array
      */
-    public function detailFilms(int $film_id)
+    public function detailFilms(int $filmId, string $className):Film
     {
 
         //Connexion à la BDD
         $database = new Database();
 
         //Requete SQL
-        $query = "SELECT * FROM film WHERE film_id = '".$film_id."'";
-        $films = $database->queryUnique($query);
-        return $films;
+        $query = "SELECT * FROM film NATURAL JOIN genre WHERE film_id = '" . $filmId . "'";
+        $film = $database->queryUnique($query, $className);
+        return $film;
+    }
+
+    public function truncate(string $string, int $length, string $append): string
+    {
+        $string = trim($string);
+
+        if (strlen($string) > $length) {
+            $string = wordwrap($string, $length);
+            $string = explode("\n", $string, 2);
+            $string = $string[0] . $append;
+        }
+
+        return $string;
+    }
+
+    public function recupId()
+    {
+        $url = $_SERVER['REQUEST_URI'];
+        $id = substr($url, 6);
+        return compact('id');
     }
 }

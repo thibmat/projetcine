@@ -20,9 +20,13 @@ class RegisterController {
                 $database = new Database();
 
                 // On crée un utilisateur en local
-                $user = new User($_POST['username'],$_POST['email'],$_POST['password']);
+                $user = new User();
+                $user->setUserName($_POST['username']);
+                $user->setUserMail($_POST['email']);
+                $user->setUserPassword($_POST['password']);
 
-                $query = "INSERT INTO app_user (user_name, user_mail, user_password) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getEmail(),$user->getPassword()).")";
+                $query = "INSERT INTO app_user (user_name, user_mail, user_password,user_photo) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getEmail(),$user->getPassword(),'').")";
+
                 try{
                     $success = $database->exec($query);
                 }catch(\PDOException $e){

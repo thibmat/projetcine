@@ -6,96 +6,105 @@ class User
     /**
      * @var int
      */
-    private $id;
+    private $user_id;
     /**
      * @var string
      */
-    private $username;
+    private $user_name;
     /**
      * @var string
      */
-    private $email;
+    private $user_mail;
     /**
      * @var string
      */
-    private $password;
+    private $user_password;
 
     /**
      * @var int
      */
-    private $user_role;
+    private $user_role_role_id;
 
-
-
-    public function __construct(string $username, string $email, string $password)
-    {
-        $this->username = $username;
-        $this->email = $email;
-        $this->setPassword($password);
-    }
     /**
      * @return int
      */
-    public function getId()
+    public function getUserId(): int
     {
-        return $this->id;
+        return $this->user_id;
     }
 
     /**
-     * @param int $id
+     * @param int $user_id
      */
-    public function setId($id)
+    public function setUserId(int $user_id): void
     {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param string $username
-     */
-    public function setUsername($username)
-    {
-        $this->username = $username;
+        $this->user_id = $user_id;
     }
 
     /**
      * @return string
      */
-    public function getEmail()
+    public function getUserName(): string
     {
-        return $this->email;
+        return $this->user_name;
     }
 
     /**
-     * @param string $email
+     * @param string $user_name
      */
-    public function setEmail($email)
+    public function setUserName(string $user_name): void
     {
-        $this->email = $email;
+        $this->user_name = $user_name;
     }
 
     /**
      * @return string
      */
-    public function getPassword()
+    public function getUserMail(): string
     {
-        return $this->password;
+        return $this->user_mail;
     }
 
     /**
-     * @param string $password
+     * @param string $user_mail
      */
-    public function setPassword($password):void
+    public function setUserMail(string $user_mail): void
     {
-        $this->password = password_hash($password,PASSWORD_DEFAULT);
+        $this->user_mail = $user_mail;
     }
+
+    /**
+     * @return string
+     */
+    public function getUserPassword(): string
+    {
+        return $this->user_password;
+    }
+
+    /**
+     * @param string $user_password
+     */
+    public function setUserPassword(string $user_password): void
+    {
+        $this->user_password = $user_password;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUserRoleRoleId(): int
+    {
+        return $this->user_role_role_id;
+    }
+
+    /**
+     * @param int $user_role_role_id
+     */
+    public function setUserRoleRoleId(int $user_role_role_id): void
+    {
+        $this->user_role_role_id = $user_role_role_id;
+    }
+
 
     /**récupère le nom d'utilisateur, l'amil et le mot de passe. Prepare la requete SQL pour le "Insert into"
      * @return string
@@ -103,16 +112,10 @@ class User
 
     public function getStrParamsSQL():string
     {
-        $tab = [$this->username, $this->email, $this->password];
+        $tab = [$this->user_name, $this->user_mail, $this->user_password];
         return "'".htmlentities(implode("','",$tab))."'";
 
     }
 
-    /**
-     * @return int
-     */
-    public function getUserRole()
-    {
-        return $this->user_role;
-    }
+
 }

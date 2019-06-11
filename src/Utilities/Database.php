@@ -2,7 +2,7 @@
 namespace src\Utilities;
 
 use PDO;
-use src\Entity\Film;
+
 /**
  * Cette classe utilise PDO afin d'effectuer des opérations sur la BDD
  */
@@ -42,15 +42,11 @@ class Database
         $result = $this->pdo->query($sql);
         return $result->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE,$className);
     }
-    public function queryUser(string $sql, string $className): ?array
-    {
-            $result = $this->pdo->query($sql);
-            return $result->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE,$className,array('username','email','password'));
-    }
-    public function queryUnique(string $sql)
+
+    public function queryUnique(string $sql, string $classname)
     {
         $result = $this->pdo->query($sql);
-        return $result->fetch();
+        return $result->fetchObject($classname);
     }
     /**
      * Requete SQL pour la création, la modification, l'update et la suppression

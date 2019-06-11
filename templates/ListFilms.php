@@ -16,19 +16,25 @@ extract($datas);
         <div class="row justify-content-around">
 <?php
 foreach ($films as $film):?>
-    <a href="film?film_id=<?= $film->getFilmId()?>">
+
     <div class="card" style="width:30%; margin:10px; height:400px;overflow:hidden; border-radius:40px;padding:30px;">
             <figure style="width:50%;margin:auto;">
                 <img src="/img/<?php echo $film->getFilmImageName()?>" class="card-img-top img-fluid mh-100 mw-100" alt="Image de <?php echo $film->getFilmTitre() ?>">
             </figure>
             <div class="card-body">
-                <h5 class="card-title w-100 text-center"><?php echo "<strong>".$film->getFilmTitre()."</strong>";?></h5>
-                <p class="card-text"><?php echo "<strong>Sortie le : ".$film->getFilmDate()."</strong><br>".$film->getFilmSynopsis();?></p>
+                <a href="film/<?=$film->getFilmId()?>">
+                    <h5 class="card-title w-100 text-center"><?php echo "<strong>".$film->getFilmTitre()."</strong>";?></h5>
+                    <p class="card-text"><?php echo "<strong>Sortie le ".$film->getFilmDate()."</strong><br>".$film->truncate($film->getFilmSinopsys(),80,'(...)');?></p>
+                </a>
+                <?php
+                if ($_SESSION['user_role'] >= 2){
+                    echo "<div class=\"card-footer\"><a href=\"/addFilm?filmId=".$film->getFilmId()."\">Modifier</a></div>";
+                }
+                ?>
+
             </div>
-            <div class="card-footer">
-                <a href="?film_id=<?= $film->getFilmId();?>">Lire plus</a>
-            </div>
-    </div></a>
+
+    </div>
 <?php
 endforeach;
 ?>

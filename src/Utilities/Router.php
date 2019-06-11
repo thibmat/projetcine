@@ -22,16 +22,20 @@ class Router
      * Vérifie l'URL et renvoie l'enventuel fichier à appeler
      * @return string|null - Retourne l'éventuel template à appeler
      */
+    /**
+     * Vérifie l'URL et renvoie l'enventuel fichier à appeler
+     * @return string|null - Retourne l'éventuel template à appeler
+     */
     public function match(): ?string
     {
         // On récupère l'URL
         $url = $_SERVER['REQUEST_URI'];
-        $urlGet = explode("?",$url);
-        $url = $urlGet[0];
         // On boucle dans les routes enregistrées
         foreach($this->routes as $route) {
+            // Echappement
+            $route['url'] = preg_replace('/\//', '\/', $route['url']);
             // Si la route correspond à l'URL
-            if($route['url'] === $url) {
+            if(preg_match('/^'.$route['url'].'$/', $url)) {
                 // On retourne le template à exécuter
                 return $route['template'];
             }
