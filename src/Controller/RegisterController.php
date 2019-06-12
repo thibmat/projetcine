@@ -10,6 +10,8 @@ class RegisterController {
     {
         $formValidator = new FormValidator();
         $errors = [];
+        $user = new User();
+        $success = 0;
         //Verification formulaire + inscription de l'utilisateur en bdd
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $errors = $formValidator->validate([
@@ -17,7 +19,6 @@ class RegisterController {
                 ['email', 'text', 128],
                 ['password', 'text', 128]
             ]);
-
             $isError = false;
             foreach ($errors as $error) {
                 if($error !== '') {
@@ -25,12 +26,10 @@ class RegisterController {
                 }
             }
             if (!$isError) {
-
                 //var_dump("On peut inscrire l'utilisateur");
                 $database = new Database();
-
                 // On crée un utilisateur en local
-                $user = new User();
+
                 $user->setUserName($_POST['username']);
                 $user->setUserMail($_POST['email']);
                 $user->setUserPassword($_POST['password']);

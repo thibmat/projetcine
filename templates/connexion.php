@@ -6,13 +6,12 @@ $controller = new AuthController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $datas = $controller->connectUser();
     extract($datas);
-    var_dump($datas);
    if ($success == 1) {
        $_SESSION['username'] = $username;
        $_SESSION['user_role'] = $user_role;
        header('location:/index.php/');
     }else {
-       echo 'Les informations de connexions ne sont pas valides';
+       echo $errorMessage;
     }
 }
 

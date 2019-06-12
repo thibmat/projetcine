@@ -36,7 +36,7 @@ class AddFilmController
                 ['film_titre', 'text', 128],
                 ['film_date','date'],
                 ['film_sinopsys', 'text', 65000],
-                ['film_image_name','file',2,'films', ['jpg'=>'image/jpeg']]
+                ['film_image_name','file',2,'films', ['jpg'=>'image/jpeg','png'=>'image/png','jpeg'=>'image/jpeg'],'gif'=>'image/gif']
             ]);
 
             $update = intval($_POST['update']);

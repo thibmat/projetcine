@@ -25,7 +25,7 @@ class Database
             $this->pdo = new PDO(
                 'mysql:host=localhost;dbname=mondocine',
                 'root',
-                '',
+                'root',
                 [
                     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -65,7 +65,7 @@ class Database
      * @param string $sql
      * @return int
      */
-    public function exec(string $sql)
+    public function exec(string $sql):int
     {
         return $this->pdo->exec($sql);
     }

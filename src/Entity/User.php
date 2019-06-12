@@ -26,6 +26,11 @@ class User
     private $user_role_role_id;
 
     /**
+     * @var string
+     */
+    private $user_photo;
+
+    /**
      * @return int
      */
     public function getUserId(): int
@@ -105,8 +110,23 @@ class User
         $this->user_role_role_id = $user_role_role_id;
     }
 
+    /**
+     * @return string
+     */
+    public function getUserPhoto(): string
+    {
+        return $this->user_photo;
+    }
 
-    /**récupère le nom d'utilisateur, l'amil et le mot de passe. Prepare la requete SQL pour le "Insert into"
+    /**
+     * @param string $user_photo
+     */
+    public function setUserPhoto(string $user_photo): void
+    {
+        $this->user_photo = $user_photo;
+    }
+
+    /**récupère le nom d'utilisateur, l'email et le mot de passe. Prepare la requete SQL pour le "Insert into"
      * @return string
      */
 
