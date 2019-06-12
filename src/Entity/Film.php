@@ -59,7 +59,7 @@ class Film
      */
     public function getFilmTitre(): string
     {
-        return $this->film_titre;
+        return $this->film_titre  ?? '';
     }
 
     /**
@@ -75,7 +75,7 @@ class Film
      */
     public function getFilmDate(): string
     {
-        return $this->film_date;
+        return $this->film_date  ?? '';
     }
 
     /**
@@ -91,7 +91,7 @@ class Film
      */
     public function getFilmSinopsys(): string
     {
-        return $this->film_sinopsys;
+        return $this->film_sinopsys  ?? '';
     }
 
     /**
@@ -107,7 +107,7 @@ class Film
      */
     public function getFilmImageName(): string
     {
-        return $this->film_image_name;
+        return $this->film_image_name  ?? '';
     }
 
     /**
@@ -123,7 +123,7 @@ class Film
      */
     public function getGenreId(): int
     {
-        return $this->genre_id;
+        return $this->genre_id  ?? 0;
     }
 
     /**
@@ -187,5 +187,13 @@ class Film
         $url = $_SERVER['REQUEST_URI'];
         $id = substr($url, 6);
         return compact('id');
+    }
+
+    public function deleteFilm (int $film_id):int
+    {
+        $database = new Database();
+        $query = "DELETE FROM film WHERE film_id = '" . $film_id . "'";
+        $delete= $database->exec($query);
+        return $delete;
     }
 }

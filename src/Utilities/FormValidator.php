@@ -97,6 +97,92 @@ class FormValidator{
         return $message ?? '';
     }
 
+    /**
+     * Cette fonction vérifie que l'upload d'un fichier s'est bien passé.
+     * @param string $key : Nom du champ dans le formulaire
+     * @param int $maxSize : taille max du fichier (en Mo)
+     * @param string $dir : Repertoire de destination
+     * @param array $acceptedFormats : Tableau avec les formats acceptés
+     * @return string
+     */
+    public static function checkPostFile(string $key, int $maxSize, string $dir, array $acceptedFormats):string
+    {
+
+        if(!array_key_exists($key, $_FILES) || empty($_FILES[$key]) && $_FILES["photo"]["error"] != 0) {
+            $message = "L'upload du fichier a échoué : " . $_FILES["photo"]["error"];
+        }else{
+
+                $filename = $_FILES[$key]["name"];
+                $filetype = $_FILES[$key]["type"];
+                $filesize = $_FILES[$key]["size"];
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                if (!array_key_exists($ext, $acceptedFormats)) {
+                    $message = "Erreur : L'extension de votre fichier n'est pas valide.";
+                }else{
+
+                    $maxsize = $maxSize * 1024 * 1024;
+                    if ($filesize > $maxsize){
+                        $message = "Erreur : Votre fichier est trop lourd";
+                    }else{
+                        if(in_array($filetype, $acceptedFormats)){
+
+                            if(file_exists(dirname(__DIR__,2)."/public/img/". $dir . "/" . $_FILES[$key]["name"])) {
+                                $message = $_FILES[$key]["name"] . " existe déjà.";
+
+                            }else {
+                                move_uploaded_file($_FILES[$key]["tmp_name"], dirname(__DIR__,2)."/public/img/". $dir . "/" . $_FILES[$key]["name"]);
+
+
+                                }
+                        }
+                    }
+                }
+            }
+
+        return $message ?? '';
+    }
+    public function validate(array $datas)
+    {
+        $errors = [];
+        foreach ($datas as $data) {
+            if ($data[1] == 'text') {
+                $errors[$data[0]] = self::checkPostText($data[0], $data[2]);
+            }elseif ($data[1] == 'date') {
+                $error[$data[0]] = self::checkPostDate($data[0]);
+            }
+            elseif ($data[1] == 'file'){
+                $errors[$data[0]] = self::checkPostFile($data[0],$data[2],$data[3],$data[4]);
+            }
+        }
+        return $errors;
+    }
+
+    public function generateInputText(string $key, string $type, string $label, array $errors, ?string $defaultValue=''): string {
+        $isError = array_key_exists($key, $errors) && !empty($errors[$key])? 'is-invalid' : '';
+        $value = $defaultValue;
+        $error = $errors[$key] ?? "";
+        return <<<EOT
+<div class="form-group">
+<label for="$key">$label</label>
+<input  type="$type"
+        class="form-control $isError"
+        id="$key" name="$key" value="$value">
+<div class="invalid-feedback">$error</div>
+</div>
+EOT;
+    }
+    public function generateInputTextArea(string $key, string $label, int $lignes, array $errors, ?string $defaultValue=''): string {
+        $isError = array_key_exists($key, $errors) && !empty($errors[$key])? 'is-invalid' : '';
+        $value = $defaultValue;
+        $error = $errors[$key] ?? "";
+        return <<<EOT
+<div class="form-group">
+<label for="$key">$label</label>
+<textarea class="form-control" id="$key" name="$key" rows="$lignes">$value</textarea>
+<div class="invalid-feedback">$error</div>
+</div>
+EOT;
+    }
 }
 
 

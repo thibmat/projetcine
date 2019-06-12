@@ -50,7 +50,7 @@ class Genre
         $this->genre_libelle = $genre_libelle;
     }
 
-    public function recupGenre()
+    public function recupGenre():array
     {
         //Connexion à la BDD
         $database = new Database();

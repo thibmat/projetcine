@@ -37,10 +37,15 @@ class Database
      * @param string $className
      * @return array|null
      */
-    public function query(string $sql, string $className): ?array
+    public function query(string $sql, ?string $className=''): ?array
     {
-        $result = $this->pdo->query($sql);
-        return $result->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE,$className);
+        if ($className != '') {
+            $result = $this->pdo->query($sql);
+            return $result->fetchAll(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, $className);
+        }else{
+            $result = $this->pdo->query($sql);
+            return $result->fetchAll();
+        }
     }
 
     public function queryUnique(string $sql, string $classname)
@@ -48,6 +53,13 @@ class Database
         $result = $this->pdo->query($sql);
         return $result->fetchObject($classname);
     }
+
+    public function fetch(string $sql)
+    {
+        $result = $this->pdo->query($sql);
+        return $result->fetch();
+    }
+
     /**
      * Requete SQL pour la création, la modification, l'update et la suppression
      * @param string $sql

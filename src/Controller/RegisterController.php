@@ -8,13 +8,23 @@ class RegisterController {
 
     public function register():array
     {
+        $formValidator = new FormValidator();
+        $errors = [];
         //Verification formulaire + inscription de l'utilisateur en bdd
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
-            $errorMessageUsername = FormValidator::checkPostText('username', 128);
-            $errorMessageEmail = FormValidator::checkPostEmail('email', 255);
-            $errorMessagePassword = FormValidator::checkPostText('password', 100);
+            $errors = $formValidator->validate([
+                ['username', 'text', 128],
+                ['email', 'text', 128],
+                ['password', 'text', 128]
+            ]);
 
-            if (empty($errorMessageUsername) && empty($errorMessagePassword) && empty($errorMessageEmail)){
+            $isError = false;
+            foreach ($errors as $error) {
+                if($error !== '') {
+                    $isError = true;
+                }
+            }
+            if (!$isError) {
 
                 //var_dump("On peut inscrire l'utilisateur");
                 $database = new Database();
@@ -25,7 +35,7 @@ class RegisterController {
                 $user->setUserMail($_POST['email']);
                 $user->setUserPassword($_POST['password']);
 
-                $query = "INSERT INTO app_user (user_name, user_mail, user_password,user_photo) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getEmail(),$user->getPassword(),'').")";
+                $query = "INSERT INTO app_user (user_name, user_mail, user_password) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getUserMail(),$user->getUserPassword()).")";
 
                 try{
                     $success = $database->exec($query);
@@ -39,7 +49,7 @@ class RegisterController {
 
             }
         }
-        return compact ('success','errorMessageUsername','errorMessageEmail','errorMessagePassword',"user");
+        return compact('errors', 'success', 'user', 'formValidator');
     }
 }
 

@@ -1,7 +1,6 @@
 <?php
 use src\Entity\Film;
 use src\Entity\Critique;
-
 $film = new Film();
 $filmId = $film->recupId();
 $filmId=intval($filmId['id']);
@@ -14,6 +13,16 @@ $filmdetail = $film->detailFilms($filmId,Film::class);
 
     <div class="card" style="width:100%; margin:10px; border-radius:40px;padding:30px;">
         <h1 style="margin-left:60px;"><?= $filmdetail->getFilmTitre()." (".$filmdetail->getGenreLibelle().")";?> </h1>
+        <?php
+        if (isset($_SESSION['user_role']) && $_SESSION['user_role']>=2){?><a href="../addFilm/<?= $filmdetail->getFilmId();?>">Modifier le film</a>
+        <?php
+            if ($_SESSION['user_role'] === 3) {
+                ?>
+                <a href="/films/delete/<?= $filmdetail->getFilmId(); ?>">Supprimer</a>
+                <?php
+            }
+        }
+        ?>
         <figure style="width:50%;margin:auto;">
             <img src="/img/<?php echo $filmdetail->getFilmImageName()?>" class="card-img-top img-fluid mh-100 mw-100" alt="Image de <?php echo $filmdetail->getFilmTitre() ?>">
         </figure>

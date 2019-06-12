@@ -14,10 +14,11 @@ if (isset($_GET['exit'])){
 $router = new Router();
 $router->addRoute('/','index.php');
 $router->addRoute('/inscription','register.php');
-$router->addRoute('/films[a-z0-9&?=]*','ListFilms.php');
+$router->addRoute('/films[a-z0-9/]*','ListFilms.php');
 $router->addRoute('/film/[0-9]*', 'film.php');
 $router->addRoute('/connexion','connexion.php');
-$router->addRoute('/addFilm[a-zA-Z0-9&?=]*','addFilm.php');
+$router->addRoute('/addFilm[0-9/]*','addFilm.php');
+$router->addRoute('/validcritiques[0-9/]*','validCritiques.php');
 
 $template = $router->match();
 require_once dirname(__DIR__) . "/templates/inc/header.php";

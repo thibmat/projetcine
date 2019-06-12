@@ -79,7 +79,7 @@ class Critique
         //Connexion à la BDD
         $database = new Database();
         //Requete SQL
-        $query = "SELECT critique_titre,critique_contenu,user_name FROM critique JOIN app_user ON app_user_user_id = app_user.user_id WHERE film_film_id = '".$film_id."' ORDER BY critique_id";
+        $query = "SELECT critique_titre,critique_contenu,user_name FROM critique JOIN app_user ON app_user_user_id = app_user.user_id WHERE isPublished = 1 AND film_id = '".$film_id."' ORDER BY critique_id";
         $critiques = $database->query($query,Critique::class);
         return compact('critiques');
     }

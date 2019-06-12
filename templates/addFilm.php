@@ -1,36 +1,11 @@
 <?php
 use src\Entity\Film;
 use src\Controller\AddFilmController;
-use src\Entity\Genre;
-
+use src\Utilities\FormValidator;
 $controller = new AddFilmController();
 $datas = $controller->verifAddFilm();
-$genre = new Genre();
-$genres = $genre->recupGenre();
 extract($datas);
-if (isset($_GET['filmId']))
-{
-    $datas = new film();
-    $film = $datas->detailFilms($_GET['filmId'],Film::class);
-    $titre = $film->getFilmTitre();
-    $date = $film->getFilmDate();
-    $sinopsys = $film->getFilmSinopsys();
-    $genreFilm = $film->getGenreId();
-    $imageName = $film->getFilmImageName();
-    $valider = "Mettre à jour le film";
-    $update = $film->getFilmId();
-}elseif (!empty($_POST)){
-    $titre = $_POST['film_titre'];
-    $date = $_POST['film_date'];
-    $sinopsys = $_POST['film_sinopsys'];
-    $genreFilm = $_POST['genre_id'];
-    $imageName = $_POST['film_image_name'];
-    $valider = "Ajouter le film";
-    $update = 0;
-}else{
-    $valider = "Ajouter le film";
-    $update = 0;
-}
+$formValidator = new FormValidator();
 ?>
     <main class="container">
         <?php if(isset($success) && $success === 1) : ?>
@@ -42,25 +17,10 @@ if (isset($_GET['filmId']))
             </div>
         <?php endif; ?>
         <h1>Ajout de film dans la base de données</h1>
-        <form method="post">
-            <div class="form-group">
-                <label for="film_titre">Titre du film</label>
-                <input type="text" class="form-control <?= (isset($errorMessageTitre) && !empty($errorMessageTitre)) ? 'is-invalid' : '' ?>" id="username" name="film_titre" placeholder="Titre du Film" value="<?= $titre ?? ''?>">
-                <div class="invalid-feedback"><?= $errorMessageTitre ?? "" ?></div>
-            </div>
-
-            <div class="form-group">
-                <label for="film_date">Date de sortie</label>
-                <input type="date" class="form-control <?= (isset($errorMessageDate) && !empty($errorMessageDate)) ? 'is-invalid' : '' ?>" id="film_date" name="film_date" placeholder="Date de sortie" value="<?= $date ?? ''?>">
-                <div class="invalid-feedback"><?= $errorMessageDate ?? "" ?></div>
-            </div>
-
-            <div class="form-group">
-                <label for="film_sinopsys">Synopsis</label>
-                <textarea class="form-control" id="film_sinopsys" name="film_sinopsys" rows="7" ><?= $sinopsys ?? ''?></textarea>
-                <div class="invalid-feedback"><?= $errorMessageSinopsys ?? "" ?></div>
-            </div>
-
+        <form method="post" enctype="multipart/form-data">
+            <?= $formValidator->generateInputText('film_titre', 'text','Titre du film',$errors,$titre) ?>
+            <?= $formValidator->generateInputText('film_date', 'date','Date de sortie',$errors,$date) ?>
+            <?= $formValidator->generateInputTextarea('film_sinopsys', 'Synopsis',7,$errors,$sinopsys) ?>
             <div class="form-group">
                 <label for="genre_id">Genre : </label>
                 <select class="form-control" id="genre_id" name="genre_id">
@@ -79,11 +39,11 @@ if (isset($_GET['filmId']))
                 <input type="text" class="form-control" disabled='disabled' value="<?php if (isset($imageName)) echo $imageName;?>" />
             </div>
 <?php
-            if(isset($update) && $update != 0) {
+
                 ?>
                 <input type="hidden" name="update" value="<?= $update ?>"/>
                 <?php
-            }
+
 ?>
             <input type="submit" value="<?= $valider ?>" class="btn btn-outline-success">
         </form>

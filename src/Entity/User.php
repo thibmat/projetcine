@@ -86,7 +86,7 @@ class User
      */
     public function setUserPassword(string $user_password): void
     {
-        $this->user_password = $user_password;
+        $this->user_password = password_hash($user_password,PASSWORD_DEFAULT);
     }
 
     /**
