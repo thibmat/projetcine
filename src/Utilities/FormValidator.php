@@ -108,8 +108,8 @@ class FormValidator{
     public static function checkPostFile(string $key, int $maxSize, string $dir, array $acceptedFormats):string
     {
 
-        if(!array_key_exists($key, $_FILES) || empty($_FILES[$key]) && $_FILES["photo"]["error"] != 0) {
-            $message = "L'upload du fichier a échoué : " . $_FILES["photo"]["error"];
+        if(!array_key_exists($key, $_FILES) || empty($_FILES[$key]) && $_FILES[$key]["error"] != 0) {
+            $message = "L'upload du fichier a échoué : " . $_FILES[$key]["error"];
         }else{
 
                 $filename = $_FILES[$key]["name"];

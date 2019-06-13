@@ -3,7 +3,6 @@
 
 namespace src\Entity;
 
-
 use src\Utilities\Database;
 use \DateTime;
 

@@ -1,5 +1,6 @@
 <?php
 namespace src\Entity;
+use \DateTime;
 
 class User
 {
@@ -33,7 +34,7 @@ class User
     /**
      * @var \DateTime
      */
-    private $user_dateInscription;
+    private $user_dateinscription;
 
     /**
      * @return int
@@ -118,7 +119,7 @@ class User
     /**
      * @return string
      */
-    public function getUserPhoto(): string
+    public function getUserPhoto():string
     {
         return $this->user_photo;
     }
@@ -131,14 +132,14 @@ class User
         $this->user_photo = $user_photo;
     }
     /**
-     * @return \DateTime
+     * @return \Date
      */
-    public function getUserDateInscription(): \DateTime
+    public function getUserDateinscription(): \DateTime
     {
-        if (is_string($this->user_dateInscription)){
-            $this->user_dateInscription = new \DateTime($this->user_dateInscription);
+        if (is_string($this->user_dateinscription)){
+            $this->user_dateinscription = new \DateTime($this->user_dateinscription);
         }
-        return $this->user_dateInscription;
+        return $this->user_dateinscription ?? '';
     }
     /**
      * @param \DateTime $user_dateInscription
