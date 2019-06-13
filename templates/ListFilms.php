@@ -1,64 +1,102 @@
 <?php
 use src\Controller\listFilmsController;
+if(array_key_exists('min',$_GET) && array_key_exists('max',$_GET)){
+    $min = intval($_GET['min']);
+    $max = intval($_GET['max']);
+}else{
+    $min = 0;
+    $max = 6;
+}
 $controller = new listFilmsController();
-$datas1 = $controller->recupMinMax();
+$datas1 = $controller->recupMinMax($min, $max);
 extract($datas1);
 $nbFilms = $controller->nbreFilmsTotal();
 $nbPages = $nbFilms % 6;
-$min = intval($minmax[0]);
-$max = intval($minmax[1]);
-$datas = $controller->listFilms($min,$max);
-extract($datas);
+if ($action !== 'filter'){
+    $datas = $controller->listFilms($min,$max);
+    extract($datas);
+}
+$genres = $controller->recupGenres();
+$annees = $controller->recupAnnees();
+$annees = array_unique($annees);
 ?>
 <h1 style="margin-left:60px;">Les films </h1>
-    <main class='container'>
-        <?php if(isset($delete) && $delete === 1) : ?>
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                Film Supprimé avec succès
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        <?php endif; ?>
-        <div class="row justify-content-around">
-
-<?php
-foreach ($films as $film):?>
-            <div class="card" style="width:30%; margin:10px; height:400px;overflow:hidden; border-radius:40px;padding:30px;">
-                    <figure style="width:50%;margin:auto;">
-                        <img src="/img/<?php echo $film->getFilmImageName()?>" class="card-img-top img-fluid mh-100 mw-100" alt="Image de <?php echo $film->getFilmTitre() ?>">
-                    </figure>
-                    <div class="card-body">
-                        <a href="/film/<?=$film->getFilmId()?>">
-                            <h5 class="card-title w-100 text-center"><?php echo "<strong>".$film->getFilmTitre()."</strong>";?></h5>
-                            <p class="card-text"><?php echo "<strong>Sortie le ".$film->getFilmDate()."</strong><br>".$film->truncate($film->getFilmSinopsys(),80,'(...)');?></p>
-                        </a>
-                        <?php
-                        if (array_key_exists('user_role',$_SESSION) && $_SESSION['user_role'] >= 2){
-                            echo "<div class=\"card-footer\"><a href=\"../addFilm/".$film->getFilmId()."\">Modifier</a></div>";
-                        }
-                        ?>
-
-                    </div>
-
-            </div>
-<?php
-endforeach;
-?>
-            <div style="width:100%;margin:auto;text-align:center;">
-                <?php
-                if ($min != 0){
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="filtres w-100">
+            <?php
+            foreach($genres as $genre){
                 ?>
-                <a href="/films/<?= $min-6;?>/<?= $max-6;?>"><<</a>
-                <?php
-                }
-                if ($max<=($nbPages*6)) {
-                    ?>
-                    <a href="/films/<?= $max; ?>/<?= $max + 6; ?>">>></a>
-                <?php
-                }
+                <a href="/films/filter/genre/<?=$genre->getGenreId()?>"><button type="button" class="btn btn-sm btn-outline-secondary"><?=$genre->getGenreLibelle();?>
+                </button></a>
+            <?php
+            }
+            ?>
+            <?php
+            foreach($annees as $annee){
                 ?>
-            </div>
+                <a href="/films/filter/annee/<?=$annee?>"><button type="button" class="btn btn-sm btn-outline-secondary"><?=$annee;?>
+                </button></a>
+                <?php
+            }
+            ?>
         </div>
-</main>
+        <div class="row">
+            <main class='container'>
+                <?php if(isset($delete) && $delete === 1) : ?>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        Film Supprimé avec succès
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                <?php endif; ?>
+                <div class="row justify-content-around">
 
+            <?php
+            foreach ($films as $film):?>
+
+                <div class="col-md-4 p-1">
+                    <div class="card mb-4 box-shadow ">
+                        <img class="card-img-top" src="/img/<?= $film->getFilmImageName()?>" alt="Image de <?= $film->getFilmTitre()?>" style="height:400px;width:300px; margin:auto;">
+                        <div class="card-body">
+                            <h5 class="card-title w-100"><span style="font-size:70%;"><?= "[".$film->getGenreLibelle()."]</span><br><strong>".$film->getFilmTitre()."</strong>";?></h5>
+                            <p class="card-text "><?= "<strong>Sortie le ".$film->getFilmDate()."</strong><br>".$film->truncate($film->getFilmSinopsys(),50,' (...)');?></p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="btn-group mx-auto">
+                                    <?php
+                                    if (isset($_SESSION['user_role']) && $_SESSION['user_role']>=2) {
+                                        ?>
+                                        <a href="../addFilm/<?= $film->getFilmId(); ?>">
+                                            <button type="button" class="btn btn-sm btn-outline-secondary">Editer
+                                            </button>
+                                        </a>
+                                        <?php
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php
+            endforeach;
+            ?>
+        </div>
+    </div>
+    <div style="width:100%;margin:auto;text-align:center;">
+        <?php
+        if ($min != 0){
+            ?>
+            <a href="?min=<?= $min-6;?>&amp;max=<?= $max-6;?>"><<</a>
+            <?php
+        }
+        if ($max<($nbPages*6)) {
+            ?>
+            <a href="?min=<?= $max; ?>&amp;max=<?= $max + 6; ?>">>></a>
+            <?php
+        }
+        ?>
+    </div>
+</div>
+</main>

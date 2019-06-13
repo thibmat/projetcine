@@ -18,6 +18,7 @@ $formValidator = new FormValidator();
         <?php endif; ?>
         <h1>Ajout de film dans la base de données</h1>
         <form method="post" enctype="multipart/form-data">
+
             <?= $formValidator->generateInputText('film_titre', 'text','Titre du film',$errors,$titre) ?>
             <?= $formValidator->generateInputText('film_date', 'date','Date de sortie',$errors,$date) ?>
             <?= $formValidator->generateInputTextarea('film_sinopsys', 'Synopsis',7,$errors,$sinopsys) ?>
@@ -34,9 +35,10 @@ $formValidator = new FormValidator();
                 </select>
             </div>
             <div class="form-group">
-                <label for="film_image_name">Affiche</label>
+
+                <label for="film_image_name">Affiche :</label>
                 <input type="file" class="form-control-file" id="film_image_name" name="film_image_name">
-                <input type="text" class="form-control" disabled='disabled' value="<?php if (isset($imageName)) echo $imageName;?>" />
+                <div class="invalid-feedback d-block"><?= $errors['film_image_name'] ?? ''?></div>
             </div>
 <?php
 

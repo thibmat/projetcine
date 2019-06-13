@@ -147,7 +147,7 @@ class FormValidator{
             if ($data[1] == 'text') {
                 $errors[$data[0]] = self::checkPostText($data[0], $data[2]);
             }elseif ($data[1] == 'date') {
-                $error[$data[0]] = self::checkPostDate($data[0]);
+                $errors[$data[0]] = self::checkPostDate($data[0]);
             }
             elseif ($data[1] == 'file'){
                 $errors[$data[0]] = self::checkPostFile($data[0],$data[2],$data[3],$data[4]);

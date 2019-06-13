@@ -12,6 +12,7 @@ class AddFilmController
     {
         $formValidator = new FormValidator();
         $errors = [];
+        $success = 0;
         $genre = new Genre();
         $genres = $genre->recupGenre();
         $filmId = $this->addrecupId();
@@ -41,7 +42,7 @@ class AddFilmController
 
             $update = intval($_POST['update']);
 
-           // Todo: $errorMessageImage verification des champs de type file
+
             $isError = false;
             foreach ($errors as $error) {
                 if($error !== '') {
@@ -71,7 +72,7 @@ class AddFilmController
                 }
             }
         }
-        return compact ('success','errors','errorMessageTitre','errorMessageDate','errorMessageSinopsys','film','genres','formValidator', 'titre', 'date', 'sinopsys', 'imageName', 'genreFilm','valider','update');
+        return compact ('success','errors','film','genres','formValidator', 'titre', 'date', 'sinopsys', 'imageName', 'genreFilm','valider','update');
     }
     public function addrecupId()
     {

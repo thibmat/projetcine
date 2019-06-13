@@ -18,7 +18,7 @@ if (isset($_SESSION['PAGE_COURANTE'])) {
 $router = new Router();
 $router->addRoute('/','index.php');
 $router->addRoute('/inscription','register.php');
-$router->addRoute('/films[a-z0-9/]*','ListFilms.php');
+$router->addRoute('/films[a-z0-9/?&=]*','ListFilms.php');
 $router->addRoute('/film/[a-z0-9/]*', 'film.php');
 $router->addRoute('/connexion','connexion.php');
 $router->addRoute('/addFilm[0-9/]*','addFilm.php');
@@ -33,6 +33,6 @@ if(is_null($template)) {
     throw new \Exception('Page introuvable');
 } else {
     require dirname(__DIR__) . "/templates/" . $template;
-    $_SESSION['PAGE_COURANTE'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $_SESSION['PAGE_COURANTE'] = "http://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 }
 require_once dirname(__DIR__) . '/templates/inc/footer.php'; ?>

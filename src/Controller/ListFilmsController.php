@@ -1,10 +1,10 @@
 <?php
 namespace src\Controller;
 
+use DateTime;
+use src\Entity\Genre;
 use src\Utilities\Database;
 use src\Entity\Film;
-
-
 class ListFilmsController
 {
 
@@ -21,26 +21,36 @@ class ListFilmsController
         $database = new Database();
 
         //Requete SQL
-        $query = "SELECT * FROM film ORDER BY film_titre,film_date LIMIT ".$min.",".$max."";
+        $query = "SELECT * FROM film NATURAL JOIN genre ORDER BY film_titre,film_date LIMIT ".$min.",".$max."";
         $films = $database->query($query,Film::class);
         return compact('films');
     }
-    public function recupMinMax():array
+    public function recupMinMax($min, $max):array
     {
         $url = $_SERVER['REQUEST_URI'];
-        $minmax = substr($url, 7);
-        if ($minmax != null){
-            $minmax = explode('/',$minmax);
-            if($minmax[0] == 'delete'){
-                $film_id = intval($minmax[1]);
-                $minmax = ['0','6'];
+        $attributs = substr($url, 7);
+        $action = '';
+        $delete = '';
+        $films ='';
+        if ($attributs != null){
+            $attributs = explode('?', $attributs);
+            $attr = explode('/',$attributs[0]);
+            if($attr[0] === 'delete'){
+                $film_id = intval($attr[1]);
                 $film = new Film();
                 $delete = $film->deleteFilm($film_id);
+            }elseif ($attr[0] === 'filter'){
+                $action='filter';
+                if ($attr[1]==='genre'){
+                    $genreId = $attr[2];
+                    $films = $this->filterGenre($genreId, $min, $max);
+                }elseif ($attr[1] === 'annee'){
+                    $annee = $attr[2];
+                    $films = $this->filterAnnee($annee, $min, $max);
+                }
             }
-        } else {
-            $minmax = ['0','6'];
         }
-        return compact('minmax','delete');
+        return compact('delete', 'films',  'action');
     }
     public function nbreFilmsTotal ():int
     {
@@ -51,6 +61,53 @@ class ListFilmsController
         $nbFilms = $database->fetch($query);
         $nbFilms = $nbFilms['COUNT(*)'];
         return $nbFilms;
+    }
+
+    /**
+     * Cette fonction récupère tous les genres présents dans la base de données
+     * @return array
+     */
+    public function recupGenres()
+    {
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT * FROM genre";
+        $genres = $database->query($query,Genre::class);
+        return $genres;
+    }
+    public function recupAnnees():array
+    {
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT film_date FROM film";
+        $annees = $database->fetchArray($query);
+
+        foreach ($annees as $annee){
+            foreach($annee as $anne) {
+                $date = new DateTime($anne);
+                $dates[] = $date->format('Y');
+            }
+        }
+        return $dates;
+    }
+    public function filterGenre($genreId, ?int $min=0, ?int $max =6){
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT * FROM film NATURAL JOIN genre WHERE genre_id = '".$genreId."' ORDER BY film_titre,film_date LIMIT ".$min.",".$max."";
+
+        $films = $database->query($query,Film::class);
+        return $films;
+    }
+    public function filterAnnee($annee, ?int $min=0, ?int $max =6){
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT * FROM film NATURAL JOIN genre WHERE film_date BETWEEN '".$annee."-01-01' AND '".$annee."-12-31' ORDER BY film_titre,film_date LIMIT ".$min.",".$max."";
+        $films = $database->query($query,Film::class);
+        return $films;
     }
 }
 
