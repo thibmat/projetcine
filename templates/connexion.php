@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
    if ($success == 1) {
        $_SESSION['username'] = $username;
        $_SESSION['user_role'] = $user_role;
-       header('location:/index.php/');
+       $_SESSION['user_id'] = $user_id;
+       header('location:'.$_SESSION['OLD_OLD_PAGE']);
     }else {
        echo $errorMessage;
     }

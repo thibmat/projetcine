@@ -3,6 +3,7 @@ namespace src\Controller;
 use src\Entity\User;
 use src\Utilities\Database;
 use src\Utilities\FormValidator;
+use DateTime;
 
 class RegisterController {
 
@@ -33,9 +34,7 @@ class RegisterController {
                 $user->setUserName($_POST['username']);
                 $user->setUserMail($_POST['email']);
                 $user->setUserPassword($_POST['password']);
-
-                $query = "INSERT INTO app_user (user_name, user_mail, user_password) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getUserMail(),$user->getUserPassword()).")";
-
+                $query = "INSERT INTO app_user (user_name, user_mail, user_password, user_dateinscription) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getUserMail(),$user->getUserPassword()).",NOW())";
                 try{
                     $success = $database->exec($query);
                 }catch(\PDOException $e){
@@ -45,7 +44,6 @@ class RegisterController {
                         throw new \Exception('PDOException dans registerController');
                     }
                 }
-
             }
         }
         return compact('errors', 'success', 'user', 'formValidator');

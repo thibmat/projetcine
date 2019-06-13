@@ -3,11 +3,13 @@ use src\Entity\Film;
 use src\Entity\Critique;
 $film = new Film();
 $filmId = $film->recupId();
-$filmId=intval($filmId['id']);
+extract($filmId);
+$filmId = intval($filmId['id']);
 $critiques = new Critique();
 $datas = $critiques->listCritiques($filmId);
 extract($datas);
 $filmdetail = $film->detailFilms($filmId,Film::class);
+
 ?>
 <main class='container'>
 
@@ -35,10 +37,20 @@ $filmdetail = $film->detailFilms($filmId,Film::class);
         <h2>Les critiques</h2>
         <div class="card-body">
             <?php
+
             foreach ($critiques as $critique):
             ?>
-                <p class="card-text"><strong><?= $critique->getCritiqueTitre()."</strong><span> écrit par : ".$critique->user_name."</span><br>".$critique->getCritiqueContenu();?></p>
+                <p class="card-text"><strong><?= $critique->getCritiqueTitre()."</strong><span> écrit par : ".$critique->user_name."</span><span> le ". $critique->getCritiqueDate()->format("d-m-Y à H:i")."</span><br>".$critique->getCritiqueContenu();?></p>
             <?php endforeach;?>
+        </div>
+        <div class="text-right">
+        <?php
+        if (isset($_SESSION['username'])){
+        ?>
+            <a href="/addcritique/<?=$filmdetail->getFilmId()?>">Rédiger une critique </a>
+        <?php
+        }
+        ?>
         </div>
     </div>
 </main>

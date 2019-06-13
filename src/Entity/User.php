@@ -31,6 +31,11 @@ class User
     private $user_photo;
 
     /**
+     * @var \DateTime
+     */
+    private $user_dateInscription;
+
+    /**
      * @return int
      */
     public function getUserId(): int
@@ -124,6 +129,23 @@ class User
     public function setUserPhoto(string $user_photo): void
     {
         $this->user_photo = $user_photo;
+    }
+    /**
+     * @return \DateTime
+     */
+    public function getUserDateInscription(): \DateTime
+    {
+        if (is_string($this->user_dateInscription)){
+            $this->user_dateInscription = new \DateTime($this->user_dateInscription);
+        }
+        return $this->user_dateInscription;
+    }
+    /**
+     * @param \DateTime $user_dateInscription
+     */
+    public function setUserDateInscription(\DateTime $user_dateInscription): void
+    {
+        $this->user_dateInscription = $user_dateInscription;
     }
 
     /**récupère le nom d'utilisateur, l'email et le mot de passe. Prepare la requete SQL pour le "Insert into"

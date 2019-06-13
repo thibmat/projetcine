@@ -1,11 +1,8 @@
 <?php
-
 namespace src\Controller;
-
 use src\Entity\User;
 use src\Utilities\Database;
 use src\Utilities\FormValidator;
-
 class AuthController
 {
     /**
@@ -30,6 +27,7 @@ class AuthController
                     if (password_verify($_POST['password'], $userConnect->getUserPassword())) {
                         $username = $userConnect->getUserName();
                         $user_role = $userConnect->getUserRoleRoleId();
+                        $user_id = $userConnect->getUserId();
                         $success = 1;
                     } else {
                         $success = 0;
@@ -41,7 +39,7 @@ class AuthController
                     $success = 0;
                     $errorMessage = 'Nous n\'avons pas trouvé d\'utilisateur avec ce mail';
                 }
-                return compact('username', 'success', 'user_role', 'errorMessage');
+                return compact('username', 'success', 'user_role', 'errorMessage','user_id');
             }
         }
     }

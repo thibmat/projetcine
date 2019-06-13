@@ -10,34 +10,58 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body style="background:lightgrey;">
-<nav class="navbar navbar-expand-md navbar-light" style="background-color: #e3f2fd;">
-    <a class="navbar-brand" href="../index.php">
-        <img src="/img/divers/mondocine-logo.jpg" width="100px" height="auto" alt="">
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarsExample04">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/index.php">Accueil <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/films">Les Films</a>
-            </li>
-
-        </ul>
-        <p class="my-2 my-md-0">
-            <?php
-            if (isset($_SESSION['username'])) {
-                echo $_SESSION['username']."(".$_SESSION['user_role'].")";
-                echo "<br><a href='?exit=yes'>Se déconnecter</a>";
-            }else{
-                echo "<a href=\"/index.php/connexion\">Se connecter </a><br>";
-                echo "<a href=\"/index.php/inscription\">Créer un compte</a>";
-            }
-            ?>
-        </p>
-    </div>
+<nav>
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">A Propos</h4>
+                        <p class="text-muted">A chacun son cinéma. Cinéphile ou simple amateur à la recherche d'un avis, Mondociné vous parle de tout. Retrouvez nos critiques, l'actualité ciné & vidéo..</p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 mr-12 py-4">
+                        <h4 class="text-white text-right">Section membre</h4>
+                        <ul class="list-unstyled">
+                            <?php
+                            if (isset($_SESSION['username'])) {
+                                ?>
+                            <li class='text-right'><a class="text-white text-right" href="/membre/<?=$_SESSION['user_id']?>" >
+                                    <?php
+                                    echo $_SESSION['username']."(".$_SESSION['user_role'].")";
+                                    ?>
+                                </a></li>
+                                <?php
+                                echo "<li class='text-right'><a class=\"text-white\" href='?exit=yes'>Se déconnecter</a></li>";
+                            }else{
+                                echo "<li class='text-right'><a class=\"text-white\" href=\"/index.php/connexion\">Se connecter </a></li>";
+                                echo "<li class='text-right'><a class=\"text-white\" href=\"/index.php/inscription\">Créer un compte</a></li>";
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark box-shadow">
+            <div class="container d-flex justify-content-between">
+                <a href="/index.php" class="navbar-brand d-flex align-items-center">
+                        <img src="/img/divers/logo.svg" width="20" height="20" style="color:white"/>
+                    <strong>Mondocine</strong>
+                </a>
+                    <a class="text-white" href="/index.php">Accueil <span class="sr-only">(current)</span></a>
+                    <a class="text-white" href="/films">Les Films</a>
+                <?php
+                if (isset($_SESSION['username']) && $_SESSION['user_role'] >= 2) {
+                    ?>
+                        <a class="text-white" href="/addFilm">Ajouter un Film</a>
+                        <a class="text-white" href="/validcritiques">Modérer les critiques</a>
+                    <?php
+                }
+                ?>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
 </nav>

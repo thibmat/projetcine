@@ -132,7 +132,6 @@ class FormValidator{
                             }else {
                                 move_uploaded_file($_FILES[$key]["tmp_name"], dirname(__DIR__,2)."/public/img/". $dir . "/" . $_FILES[$key]["name"]);
 
-
                                 }
                         }
                     }

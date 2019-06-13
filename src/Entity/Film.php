@@ -159,10 +159,8 @@ class Film
      */
     public function detailFilms(int $filmId, string $className):Film
     {
-
         //Connexion à la BDD
         $database = new Database();
-
         //Requete SQL
         $query = "SELECT * FROM film NATURAL JOIN genre WHERE film_id = '" . $filmId . "'";
         $film = $database->queryUnique($query, $className);
@@ -182,11 +180,13 @@ class Film
         return $string;
     }
 
-    public function recupId()
+    public function recupId():array
     {
         $url = $_SERVER['REQUEST_URI'];
-        $id = substr($url, 6);
-        return compact('id');
+        $request = explode('/',substr($url, 6));
+        $id = $request[0];
+        $action = $request[1] ?? '';
+        return compact('id','action');
     }
 
     public function deleteFilm (int $film_id):int

@@ -1,8 +1,10 @@
 <?php
 use src\Controller\UserController;
 use src\Entity\User;
+
 $controller = new UserController();
 $user = $controller->recupUserDetails();
+
 ?>
 <main class='container'>
 <div id="user-profile-2" class="user-profile">
@@ -33,6 +35,14 @@ $user = $controller->recupUserDetails();
 
                                 <div class="profile-info-value">
                                     <span><?=$user->getUserMail();?></span>
+                                </div>
+                            </div>
+
+                            <div class="profile-info-row">
+                                <div class="profile-info-name"> Inscrit depuis le : </div>
+
+                                <div class="profile-info-value">
+                                    <span><?=$user->getUserDateInscription()->format('d-m-Y');?></span>
                                 </div>
                             </div>
 

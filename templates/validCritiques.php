@@ -40,7 +40,7 @@ if($_SESSION['user_role']>=2) {
                         <a href="/validcritiques/valid/<?= $film->critique_id; ?>"><img src="/img/divers/valid.svg"
                                                                                   alt="Valider cette critique"
                                                                                   style="width:15px;"/></a>
-                        <a href="/validcritiques/edit/<?= $film->critique_id; ?>"><img src="/img/divers/modify.svg"
+                        <a href="/addcritique/<?= $film->getFilmId()."/".$film->critique_id;?>"><img src="/img/divers/modify.svg"
                                                                                   alt="Modifier cette critique"
                                                                                   style="width:15px;"/></a>
                         <a href="/validcritiques/delete/<?= $film->critique_id; ?>"><img src="/img/divers/trash.svg"

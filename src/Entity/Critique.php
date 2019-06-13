@@ -5,6 +5,7 @@ namespace src\Entity;
 
 
 use src\Utilities\Database;
+use \DateTime;
 
 class Critique
 {
@@ -20,6 +21,11 @@ class Critique
      * @var string
      */
     private $critique_contenu;
+
+    /**
+     * @var DateTime
+     */
+    private $critique_date;
 
     /**
      * @return int
@@ -42,7 +48,7 @@ class Critique
      */
     public function getCritiqueTitre(): string
     {
-        return $this->critique_titre;
+        return $this->critique_titre ?? '';
     }
 
     /**
@@ -58,7 +64,7 @@ class Critique
      */
     public function getCritiqueContenu(): string
     {
-        return $this->critique_contenu;
+        return $this->critique_contenu ?? '';
     }
 
     /**
@@ -67,6 +73,25 @@ class Critique
     public function setCritiqueContenu(string $critique_contenu): void
     {
         $this->critique_contenu = $critique_contenu;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getCritiqueDate(): DateTime
+    {
+        if (is_string($this->critique_date)){
+            $this->critique_date = new DateTime($this->critique_date);
+        }
+        return $this->critique_date ?? '';
+    }
+
+    /**
+     * @param DateTime $critique_date
+     */
+    public function setCritiqueDate(DateTime $critique_date): void
+    {
+        $this->critique_date = $critique_date;
     }
 
     /**
@@ -79,9 +104,28 @@ class Critique
         //Connexion à la BDD
         $database = new Database();
         //Requete SQL
-        $query = "SELECT critique_titre,critique_contenu,user_name FROM critique JOIN app_user ON app_user_user_id = app_user.user_id WHERE isPublished = 1 AND film_id = '".$film_id."' ORDER BY critique_id";
+        $query = "SELECT critique_titre,critique_contenu,critique_date, user_name FROM critique NATURAL JOIN app_user WHERE isPublished = 1 AND film_id = '" .$film_id."' ORDER BY critique_id";
         $critiques = $database->query($query,Critique::class);
         return compact('critiques');
     }
+
+    /**
+     * Cette fonction permet de récupérer les details d'une critique en bdd
+     * @param int $critiqueId
+     * @param string $className
+     * @return Critique
+     */
+    public function detailCritique(int $critiqueId, string $className):Critique
+    {
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT * FROM critique WHERE critique_id = '" . $critiqueId . "'";
+        $critique = $database->queryUnique($query, $className);
+        return $critique;
+    }
+
+
+
 
 }

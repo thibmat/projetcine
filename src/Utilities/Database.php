@@ -25,7 +25,7 @@ class Database
             $this->pdo = new PDO(
                 'mysql:host=localhost;dbname=mondocine',
                 'root',
-                'root',
+                '',
                 [
                     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
