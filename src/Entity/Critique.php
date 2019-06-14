@@ -76,13 +76,14 @@ class Critique
 
     /**
      * @return DateTime
+     * @throws \Exception
      */
     public function getCritiqueDate(): DateTime
     {
         if (is_string($this->critique_date)){
             $this->critique_date = new DateTime($this->critique_date);
         }
-        return $this->critique_date ?? '';
+        return $this->critique_date ?? new DateTime();
     }
 
     /**

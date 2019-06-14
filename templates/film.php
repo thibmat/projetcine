@@ -35,7 +35,7 @@ $filmdetail = $film->detailFilms($filmId,Film::class);
             <img src="/img/<?php echo $filmdetail->getFilmImageName()?>" class="card-img-top img-fluid mh-100 mw-100" alt="Image de <?php echo $filmdetail->getFilmTitre() ?>">
         </figure>
         <div class="card-body">
-                <p class="card-text"><?php echo "<strong>Sortie le ".$filmdetail->getFilmDate()."</strong><br>".$filmdetail->getFilmSinopsys();?></p>
+                <p class="card-text"><?php echo "<strong>Sortie le ".$filmdetail->getFilmDate()->format('d/m/Y')."</strong><br>".$filmdetail->getFilmSinopsys();?></p>
 
         </div>
     </div>

@@ -131,15 +131,17 @@ class User
     {
         $this->user_photo = $user_photo;
     }
+
     /**
      * @return \DateTime
+     * @throws \Exception
      */
     public function getUserDateinscription():DateTime
     {
         if (is_string($this->user_dateinscription)){
             $this->user_dateinscription = new DateTime($this->user_dateinscription);
         }
-        return $this->user_dateinscription ?? '';
+        return $this->user_dateinscription ?? new DateTime();
     }
     /**
      * @param \DateTime $user_dateInscription

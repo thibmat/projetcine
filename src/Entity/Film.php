@@ -16,7 +16,7 @@ class Film
      */
     private $film_titre;
     /**
-     * @var string
+     * @var DateTime
      */
     private $film_date;
     /**
@@ -71,13 +71,16 @@ class Film
     }
 
     /**
-     * @return string
+     * @return DateTime
+     * @throws \Exception
      */
-    public function getFilmDate(): string
+    public function getFilmDate(): DateTime
     {
-        return $this->film_date  ?? '';
+        if (is_string($this->film_date)){
+            $this->film_date = new DateTime($this->film_date);
+        }
+        return $this->film_date ?? new DateTime();
     }
-
     /**
      * @param string $film_date
      */

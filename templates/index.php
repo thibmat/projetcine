@@ -70,7 +70,7 @@ foreach ($films as $film):?>
                         <img class="card-img-top" src="/img/<?= $film->getFilmImageName()?>" alt="Image de <?= $film->getFilmTitre()?>" style="height:400px;width:300px; margin:auto;">
                         <div class="card-body">
                             <h5 class="card-title w-100"><span style="font-size:70%;"><?= "[".$film->getGenreLibelle()."]</span><br><strong>".$film->getFilmTitre()."</strong>";?></h5>
-                            <p class="card-text "><?= "<strong>Sortie le ".$film->getFilmDate()."</strong><br>".$film->truncate($film->getFilmSinopsys(),50,' (...)');?></p>
+                            <p class="card-text "><?= "<strong>Sortie le ".$film->getFilmDate()->format('d/m/Y')."</strong><br>".$film->truncate($film->getFilmSinopsys(),55,' (...)');?></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group mx-auto">
                                     <a href="film/<?=$film->getFilmId()?>"><button type="button" class="btn btn-sm btn-outline-secondary">Details</button></a>

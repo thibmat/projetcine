@@ -22,6 +22,7 @@ $router->addRoute('/films[a-z0-9/?&=]*','ListFilms.php');
 $router->addRoute('/film/[a-z0-9/]*', 'film.php');
 $router->addRoute('/connexion','connexion.php');
 $router->addRoute('/addFilm[0-9/]*','addFilm.php');
+$router->addRoute('/addGenre[0-9/]*','addGenre.php');
 $router->addRoute('/addcritique[0-9/]*','addCritique.php');
 $router->addRoute('/validcritiques[a-z0-9/]*','validCritiques.php');
 $router->addRoute('/membre[a-z0-9/]*','user.php');

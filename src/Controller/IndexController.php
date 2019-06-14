@@ -16,7 +16,7 @@ class IndexController
         $database = new Database();
 
         //Requete SQL
-        $query = 'SELECT * FROM film NATURAL JOIN genre ORDER BY film_date LIMIT 0,6';
+        $query = 'SELECT * FROM film NATURAL JOIN genre ORDER BY film_date  DESC LIMIT 0,6';
         $films = $database->query($query,Film::class);
         return compact('films');
     }

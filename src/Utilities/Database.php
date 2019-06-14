@@ -25,7 +25,7 @@ class Database
             $this->pdo = new PDO(
                 'mysql:host=localhost;dbname=mondocine',
                 'root',
-                'root',
+                '',
                 [
                     PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4",
                     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -83,9 +83,15 @@ class Database
         //     htmlentities($this->password)
         // ];
         // On crée une chaîne de caractères séparés de virgules et les quotes simples
+
+        $params = array_map(function($elem){
+            return htmlentities($elem, ENT_QUOTES);
+        },$params);
         $str = implode("','", $params);
+
+
         // On a ajoute une quote simple au début et une à la fin
         // On retourne l'ensemble
-        return "'" . htmlentities($str) . "'" ;
+        return "'" .$str. "'" ;
     }
 }

@@ -32,6 +32,7 @@ class ListFilmsController
         $action = '';
         $delete = '';
         $films ='';
+        $nbFilms = 0;
         if ($attributs != null){
             $attributs = explode('?', $attributs);
             $attr = explode('/',$attributs[0]);
@@ -43,14 +44,16 @@ class ListFilmsController
                 $action='filter';
                 if ($attr[1]==='genre'){
                     $genreId = $attr[2];
+                    $nbFilms = $this->nbreFilmsGenre($genreId);
                     $films = $this->filterGenre($genreId, $min, $max);
                 }elseif ($attr[1] === 'annee'){
                     $annee = $attr[2];
+                    $nbFilms = $this->nbreFilmsAnnee($annee);
                     $films = $this->filterAnnee($annee, $min, $max);
                 }
             }
         }
-        return compact('delete', 'films',  'action');
+        return compact('delete', 'films',  'action', 'nbFilms');
     }
     public function nbreFilmsTotal ():int
     {
@@ -58,6 +61,26 @@ class ListFilmsController
         $database = new Database();
         //Requete SQL
         $query = "SELECT COUNT(*) FROM film";
+        $nbFilms = $database->fetch($query);
+        $nbFilms = $nbFilms['COUNT(*)'];
+        return $nbFilms;
+    }
+    public function nbreFilmsGenre ($genreId):int
+    {
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT COUNT(*) FROM film WHERE genre_id ='".$genreId."'";
+        $nbFilms = $database->fetch($query);
+        $nbFilms = $nbFilms['COUNT(*)'];
+        return $nbFilms;
+    }
+    public function nbreFilmsAnnee ($annee):int
+    {
+        //Connexion à la BDD
+        $database = new Database();
+        //Requete SQL
+        $query = "SELECT COUNT(*) FROM film WHERE film_date BETWEEN '".$annee."-01-01' AND '".$annee."-12-31'";
         $nbFilms = $database->fetch($query);
         $nbFilms = $nbFilms['COUNT(*)'];
         return $nbFilms;

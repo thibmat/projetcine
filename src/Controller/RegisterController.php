@@ -16,6 +16,7 @@ class RegisterController {
         $valider = "S'inscrire";
         //Verification formulaire + inscription de l'utilisateur en bdd
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
+            $timestamp = time();
             $errors = $formValidator->validate([
                 ['username', 'text', 128],
                 ['email', 'text', 128],
@@ -36,6 +37,7 @@ class RegisterController {
                 $user->setUserMail($_POST['email']);
                 $user->setUserPassword($_POST['password']);
                 $user->setUserPhoto('/users/'.$_FILES['user_photo']["name"]);
+                $user->setUserPhoto('/users/'.pathinfo($_FILES['user_photo']["name"],PATHINFO_FILENAME).$timestamp.".".pathinfo($_FILES['user_photo']["name"], PATHINFO_EXTENSION));
                 $query = "INSERT INTO app_user (user_name, user_mail, user_password, user_photo, user_dateinscription) VALUES (".$database->getStrParamsGlobalSQL($user->getUsername(),$user->getUserMail(),$user->getUserPassword(), $user->getUserPhoto()).",NOW())";
                 try{
                     $success = $database->exec($query);

@@ -39,7 +39,7 @@ class Genre
      */
     public function getGenreLibelle(): string
     {
-        return $this->genre_libelle;
+        return $this->genre_libelle ?? '';
     }
 
     /**

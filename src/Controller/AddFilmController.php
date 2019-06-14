@@ -28,21 +28,19 @@ class AddFilmController
             $update = 0;
         }
         $titre = $_POST['film_titre'] ?? $film->getFilmTitre();
-        $date = $_POST['film_date'] ?? $film->getFilmDate();
+        $date = $_POST['film_date'] ?? $film->getFilmDate()->format('Y-m-d');
         $sinopsys = $_POST['film_sinopsys'] ?? $film->getFilmSinopsys();
         $genreFilm = $_POST['genre_id'] ?? $film->getGenreId() ?? '';
         $imageName = $_POST['film_image_name'] ?? $film->getFilmImageName();
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $timestamp = time();
             $errors = $formValidator->validate([
                 ['film_titre', 'text', 128],
                 ['film_date','date'],
                 ['film_sinopsys', 'text', 65000],
-                ['film_image_name','file',2,'films', ['jpg'=>'image/jpeg','png'=>'image/png','jpeg'=>'image/jpeg'],'gif'=>'image/gif']
+                ['film_image_name','file',2,'films', ['jpg'=>'image/jpeg','png'=>'image/png','jpeg'=>'image/jpeg','gif'=>'image/gif'], $timestamp]
             ]);
-
             $update = intval($_POST['update']);
-
-
             $isError = false;
             foreach ($errors as $error) {
                 if($error !== '') {
@@ -59,7 +57,7 @@ class AddFilmController
                 $film->setFilmDate($date);
                 $film->setFilmSinopsys($sinopsys);
                 $film->setGenreId($genreFilm);
-                $film->setFilmImageName('/films/'.$_FILES['film_image_name']["name"]);
+                $film->setFilmImageName('/films/'.pathinfo($_FILES['film_image_name']["name"],PATHINFO_FILENAME).$timestamp.".".pathinfo($_FILES['film_image_name']["name"], PATHINFO_EXTENSION));
                 if($update != 0){
                     $query = "UPDATE film SET film_titre =".$database->getStrParamsGlobalSQL($titre).", film_date = ".$database->getStrParamsGlobalSQL($date).", film_sinopsys = ".$database->getStrParamsGlobalSQL($sinopsys).",genre_id = ".$database->getStrParamsGlobalSQL($genreFilm).",film_image_name = ".$database->getStrParamsGlobalSQL($film->getFilmImageName())." WHERE film_id = '".$update."'";
                 } else {

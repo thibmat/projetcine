@@ -1,21 +1,23 @@
 <?php
 use src\Controller\listFilmsController;
-if(array_key_exists('min',$_GET) && array_key_exists('max',$_GET)){
+
+if(array_key_exists('min',$_GET) || array_key_exists('max',$_GET)){
     $min = intval($_GET['min']);
     $max = intval($_GET['max']);
 }else{
     $min = 0;
     $max = 6;
 }
+
 $controller = new listFilmsController();
 $datas1 = $controller->recupMinMax($min, $max);
 extract($datas1);
-$nbFilms = $controller->nbreFilmsTotal();
-$nbPages = $nbFilms % 6;
 if ($action !== 'filter'){
     $datas = $controller->listFilms($min,$max);
     extract($datas);
+    $nbFilms = $controller->nbreFilmsTotal();
 }
+$nbPages = $nbFilms % 6;
 $genres = $controller->recupGenres();
 $annees = $controller->recupAnnees();
 $annees = array_unique($annees);
@@ -23,7 +25,8 @@ $annees = array_unique($annees);
 <h1 style="margin-left:60px;">Les films </h1>
 <div class="album py-5 bg-light">
     <div class="container">
-        <div class="filtres w-100">
+        <section class="filtres w-100 mx-auto text-center" >
+            <h4>Filtres</h4>
             <?php
             foreach($genres as $genre){
                 ?>
@@ -40,8 +43,8 @@ $annees = array_unique($annees);
                 <?php
             }
             ?>
-        </div>
-        <div class="row">
+        </section>
+        <div class="row mt-3">
             <main class='container'>
                 <?php if(isset($delete) && $delete === 1) : ?>
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -61,9 +64,10 @@ $annees = array_unique($annees);
                         <img class="card-img-top" src="/img/<?= $film->getFilmImageName()?>" alt="Image de <?= $film->getFilmTitre()?>" style="height:400px;width:300px; margin:auto;">
                         <div class="card-body">
                             <h5 class="card-title w-100"><span style="font-size:70%;"><?= "[".$film->getGenreLibelle()."]</span><br><strong>".$film->getFilmTitre()."</strong>";?></h5>
-                            <p class="card-text "><?= "<strong>Sortie le ".$film->getFilmDate()."</strong><br>".$film->truncate($film->getFilmSinopsys(),50,' (...)');?></p>
+                            <p class="card-text "><?= "<strong>Sortie le ".$film->getFilmDate()->format('d/m/Y')."</strong><br>".$film->truncate($film->getFilmSinopsys(),50,' (...)');?></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group mx-auto">
+                                    <a href="/film/<?=$film->getFilmId()?>"><button type="button" class="btn btn-sm btn-outline-secondary">Details</button></a>
                                     <?php
                                     if (isset($_SESSION['user_role']) && $_SESSION['user_role']>=2) {
                                         ?>
@@ -91,7 +95,7 @@ $annees = array_unique($annees);
             <a href="?min=<?= $min-6;?>&amp;max=<?= $max-6;?>"><<</a>
             <?php
         }
-        if ($max<($nbPages*6)) {
+        if ($nbFilms > 6 && $max<($nbPages*6)) {
             ?>
             <a href="?min=<?= $max; ?>&amp;max=<?= $max + 6; ?>">>></a>
             <?php

@@ -105,9 +105,10 @@ class FormValidator{
      * @param array $acceptedFormats : Tableau avec les formats acceptés
      * @return string
      */
-    public static function checkPostFile(string $key, int $maxSize, string $dir, array $acceptedFormats):string
+    public static function checkPostFile(string $key, int $maxSize, string $dir, array $acceptedFormats, string $timestamp):string
     {
-
+        $message='';
+        $chemin_image = '';
         if(!array_key_exists($key, $_FILES) || empty($_FILES[$key]) && $_FILES[$key]["error"] != 0) {
             $message = "L'upload du fichier a échoué : " . $_FILES[$key]["error"];
         }else{
@@ -116,6 +117,8 @@ class FormValidator{
                 $filetype = $_FILES[$key]["type"];
                 $filesize = $_FILES[$key]["size"];
                 $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                $nomDuFichier = pathinfo($filename, PATHINFO_FILENAME);
+
                 if (!array_key_exists($ext, $acceptedFormats)) {
                     $message = "Erreur : L'extension de votre fichier n'est pas valide.";
                 }else{
@@ -123,6 +126,7 @@ class FormValidator{
                     $maxsize = $maxSize * 1024 * 1024;
                     if ($filesize > $maxsize){
                         $message = "Erreur : Votre fichier est trop lourd";
+
                     }else{
                         if(in_array($filetype, $acceptedFormats)){
 
@@ -130,15 +134,13 @@ class FormValidator{
                                 $message = $_FILES[$key]["name"] . " existe déjà.";
 
                             }else {
-                                move_uploaded_file($_FILES[$key]["tmp_name"], dirname(__DIR__,2)."/public/img/". $dir . "/" . $_FILES[$key]["name"]);
-
+                                move_uploaded_file($_FILES[$key]["tmp_name"], dirname(__DIR__,2)."/public/img/". $dir . "/" . $nomDuFichier.$timestamp.".".$ext);
                                 }
                         }
                     }
                 }
             }
-
-        return $message ?? '';
+        return $message;
     }
     public function validate(array $datas)
     {
@@ -150,7 +152,7 @@ class FormValidator{
                 $errors[$data[0]] = self::checkPostDate($data[0]);
             }
             elseif ($data[1] == 'file'){
-                $errors[$data[0]] = self::checkPostFile($data[0],$data[2],$data[3],$data[4]);
+                $errors[$data[0]] = self::checkPostFile($data[0],$data[2],$data[3],$data[4],$data[5]);
             }
         }
         return $errors;
