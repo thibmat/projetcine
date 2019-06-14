@@ -46,7 +46,7 @@ $filmdetail = $film->detailFilms($filmId,Film::class);
 
             foreach ($critiques as $critique):
             ?>
-                <p class="card-text"><strong><?= $critique->getCritiqueTitre()."</strong><span> écrit par : ".$critique->user_name."</span><span> le ". $critique->getCritiqueDate()->format("d-m-Y à H:i")."</span><br>".$critique->getCritiqueContenu();?></p>
+                <p class="card-text"><a href="/membre/<?=$critique->user_id;?>"><img src='/img/<?=$critique->user_photo;?>' style='width:50px;border-radius:50%;'></a><strong> <?= $critique->getCritiqueTitre()."</strong><span> écrit par : ".$critique->user_name."</span><span> le ". $critique->getCritiqueDate()->format("d-m-Y à H:i")."</span><br>".$critique->getCritiqueContenu();?></p>
             <?php endforeach;?>
         </div>
         <div class="text-right">

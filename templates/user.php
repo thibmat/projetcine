@@ -43,7 +43,7 @@ $user = $controller->recupUserDetails();
                                 <div class="profile-info-name"> Inscrit depuis le : </div>
 
                                 <div class="profile-info-value">
-                                    <span><?=$user->getUserDateinscription()->format('d-m-Y');?></span>
+                                    <span><?= $user->getUserDateinscription()->format('d-m-Y');?></span>
                                 </div>
                             </div>
 
