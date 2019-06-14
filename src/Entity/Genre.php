@@ -23,7 +23,7 @@ class Genre
      */
     public function getGenreId(): int
     {
-        return $this->genre_id;
+        return $this->genre_id ?? 0;
     }
 
     /**

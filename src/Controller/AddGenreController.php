@@ -25,7 +25,8 @@ class AddGenreController
         $errors = [];
         $success = 0;
         $genre = new Genre();
-        $genreId = $this->addrecupGenreId();
+        $datas = $this->addrecupGenreId();
+        extract($datas);
         $genreId=intval($genreId);
         $valider = "Ajouter le genre";
         if (isset($genreId) && $genreId != 0) {
@@ -37,6 +38,10 @@ class AddGenreController
         }
         $genre_libelle = $_POST['genre_libelle'] ?? $genre->getGenreLibelle() ?? '';
                 //Verification formulaire + inscription de l'utilisateur en bdd
+        if (isset($action) && $action === 'delete'){
+            $database = new Database();
+            $query = "DELETE FROM genre WHERE genre_id ='".$genreId."'";
+        }
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $errors = $formValidator->validate([
                 ['genre_libelle', 'text', 150]
@@ -67,13 +72,16 @@ class AddGenreController
         }
         return compact('errors', 'success', 'genre', 'formValidator', 'genre_libelle', 'valider');
     }
-    public function addrecupGenreId():int
+    public function addrecupGenreId():array
     {
         $url = $_SERVER['REQUEST_URI'];
         $ids = explode('/',substr($url, 10));
         $genreId = $ids[0];
+        if (isset($ids[1])) {
+            $action = $ids[1];
+        }
         $genreId = intval($genreId);
-        return $genreId;
+        return compact('genreId','action');
     }
     public function detailGenre(int $genreId, string $className):Genre
     {

@@ -7,6 +7,7 @@ $datas = $controller->addGenre();
 $genres = $controller->recupGenres();
 
 extract($datas);
+
 ?>
     <main class="container">
         <?php if(isset($success) && $success === 1) : ?>
@@ -21,9 +22,9 @@ extract($datas);
         <section class=" h-50 w-100 mx-auto text-center" >
             <h4>Les genres de film</h4>
             <?php
-            foreach($genres as $genre){
+            foreach($genres as $genres){
                 ?>
-            <a href="/addGenre/<?=$genre->getGenreId()?>"><button type="button" class="btn btn-sm btn-outline-secondary"><?=$genre->getGenreLibelle();?>
+            <a href="/addGenre/<?=$genres->getGenreId()?>"><button type="button" class="btn btn-sm btn-outline-secondary"><?=$genres->getGenreLibelle();?>
                 </button></a>
                 <?php
             }
@@ -35,6 +36,17 @@ extract($datas);
             <?= $formValidator->generateInputText('genre_libelle', 'text','Libelle du genre',$errors,$genre_libelle) ?>
 
             <input type="submit" value="<?= $valider ?>" class="btn btn-outline-success">
+
+            <?php
+            if ($genre->getGenreId() != 0) {
+                ?>
+                <a href="/addGenre/<?= $genre->getGenreId() ?>/delete">
+                    <button type="button" class="btn btn-danger">Supprimer <?= $genre->getGenreLibelle(); ?></button>
+                </a>
+                <?php
+            }
+
+                ?>
         </form>
     </main>
 <?php

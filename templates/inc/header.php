@@ -50,22 +50,24 @@
                 </a>
                     <a class="text-white" href="/index.php">Accueil <span class="sr-only">(current)</span></a>
                     <a class="text-white" href="/films">Les Films</a>
+                <?php
+                if (isset($_SESSION['username']) && $_SESSION['user_role'] >= 2) {
+                ?>
                     <li class="nav-item dropdown" style="list-style-type: none;">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Administration
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <?php
-                            if (isset($_SESSION['username']) && $_SESSION['user_role'] >= 2) {
-                                ?>
+
                                 <a class="dropdown-item" href="/addFilm">Ajouter un Film</a>
                                 <a class="dropdown-item" href="/validcritiques">Modérer les critiques</a>
                                 <a class="dropdown-item" href="/addGenre">Gerer les genres de films</a>
-                                <?php
-                            }
-                            ?>
+
                         </div>
                     </li>
+                    <?php
+                }
+                ?>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>

@@ -14,6 +14,7 @@ class RegisterController {
         $user = new User();
         $success = 0;
         $valider = "S'inscrire";
+
         //Verification formulaire + inscription de l'utilisateur en bdd
         if ($_SERVER['REQUEST_METHOD'] === 'POST'){
             $timestamp = time();
@@ -21,7 +22,7 @@ class RegisterController {
                 ['username', 'text', 128],
                 ['email', 'text', 128],
                 ['password', 'text', 128],
-                ['user_photo','file',2,'users', ['jpg'=>'image/jpeg','png'=>'image/png','jpeg'=>'image/jpeg','gif'=>'image/gif']]
+                ['user_photo','file',2,'users', ['jpg'=>'image/jpeg','png'=>'image/png','jpeg'=>'image/jpeg','gif'=>'image/gif'], $timestamp]
             ]);
             $isError = false;
             foreach ($errors as $error) {
